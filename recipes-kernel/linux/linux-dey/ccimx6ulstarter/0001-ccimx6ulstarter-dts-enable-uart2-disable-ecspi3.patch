@@ -1,0 +1,67 @@
+From 1b863370f378a0bcf3080b39b40f4a8c99c33ae9 Mon Sep 17 00:00:00 2001
+From: Cameron Haegle <cameronh@digi.com>
+Date: Sat, 3 Aug 2024 05:42:30 -0500
+Subject: [PATCH] ccimx6ulstarter dts enable uart2 - disable ecspi3
+
+---
+ arch/arm/boot/dts/imx6ul-ccimx6ulstarter-wb.dts |  7 ++++++-
+ arch/arm/boot/dts/imx6ul-ccimx6ulstarter.dtsi   | 13 +++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6ul-ccimx6ulstarter-wb.dts b/arch/arm/boot/dts/imx6ul-ccimx6ulstarter-wb.dts
+index 4de892aa1739..30056ce8cc95 100644
+--- a/arch/arm/boot/dts/imx6ul-ccimx6ulstarter-wb.dts
++++ b/arch/arm/boot/dts/imx6ul-ccimx6ulstarter-wb.dts
+@@ -32,8 +32,9 @@
+ };
+ 
+ /* ECSPI3 (as master - Raspberry PI Expansion header) */
++/* ECSPI3 conflicts with UART2 */
+ &ecspi3 {
+-	status = "okay";
++	status = "disabled";
+ 
+ 	/*
+ 	 * Add your slave devices here. Next is an example of spidev.
+@@ -46,6 +47,10 @@
+ 	};
+ };
+ 
++&uart2 {
++	status = "okay";
++};
++
+ &fec1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/imx6ul-ccimx6ulstarter.dtsi b/arch/arm/boot/dts/imx6ul-ccimx6ulstarter.dtsi
+index 0a9110da082b..40bbb9096941 100644
+--- a/arch/arm/boot/dts/imx6ul-ccimx6ulstarter.dtsi
++++ b/arch/arm/boot/dts/imx6ul-ccimx6ulstarter.dtsi
+@@ -24,6 +24,12 @@
+ 	status = "disabled";
+ };
+ 
++&uart2 {
++	pinctrl-names = "default";
++    	pinctrl-0 = <&pinctrl_uart2>;
++    	status = "disabled";
++};
++
+ &fec1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_enet1>, <&pinctrl_enet1_gpio>;
+@@ -157,6 +163,13 @@
+ 			>;
+ 		};
+ 
++		pinctrl_uart2: uart2_grp {
++            		fsl,pins = <
++                		MX6UL_PAD_UART2_RX_DATA__UART2_DCE_RX        0x1b0b1
++                		MX6UL_PAD_UART2_TX_DATA__UART2_DCE_TX        0x1b0b1
++            		>;
++		};
++
+ 		pinctrl_enet1: enet1grp {
+ 			fsl,pins = <
+ 				MX6UL_PAD_GPIO1_IO07__ENET1_MDC		0x1b0b0
