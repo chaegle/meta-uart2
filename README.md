@@ -26,7 +26,7 @@ Installation
    directory.
 
         #> cd <DEY-INSTALLDIR>/sources
-        #> git clone git://githubcom/chaegle/meta-uart2.git -b gatesgarth 
+        #> git clone git://githubcom/chaegle/meta-uart2.git -b kirkstone 
 
 
 Create and build a project
